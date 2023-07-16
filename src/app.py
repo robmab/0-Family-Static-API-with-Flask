@@ -35,9 +35,8 @@ def members():
     try:
         # this is how you can use the Family datastructure by calling its methods
         members = jackson_family.get_all_members()
-        response_body = {"family": members}
 
-        return jsonify(response_body), 200
+        return jsonify(members), 200
 
     except Exception as e:
         return jsonify({'error': str(e)}), 400
@@ -52,22 +51,20 @@ def member_id(member_id):
         if member is None:
             return jsonify({"msg": "Member not found"}), 404
 
-        return jsonify({"msg": member_id,
-                        "response": member
-                        }
+        return jsonify(member
                        ), 200
 
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
 
-@app.route("/members", methods=["POST"])
+@app.route("/member", methods=["POST"])
 def member_add():
     try:
         member = request.get_json(force=True)
         response = jackson_family.add_member(member)
 
-        return jsonify({"msg": f"Member added to family {jackson_family.last_name}", }
+        return jsonify({"msg": f"Member {member['first_name']} added to family {jackson_family.last_name}", }
                        ), 200
 
     except Exception as e:
@@ -81,10 +78,12 @@ def member_delete(member_id):
         response = jackson_family.delete_member(member_id)
 
         if response:
-            return jsonify({"msg": f"Member with id {member_id} deleted", }
+            return jsonify({"msg": f"Member with id {member_id} deleted", 
+                            "done": True}
                            ), 200
         else:
-            return jsonify({"msg": f"Member with id {member_id} doesn't exist", }
+            return jsonify({"msg": f"Member with id {member_id} doesn't exist", 
+                            "done": False }
                            ), 404
 
     except Exception as e:

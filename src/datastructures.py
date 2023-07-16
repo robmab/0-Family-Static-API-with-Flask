@@ -68,7 +68,7 @@ class FamilyStructure:
         if member == []:
             return None
 
-        return member
+        return member[0]
 
     # this method is done, it returns a list with all the family members
 
